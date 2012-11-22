@@ -88,9 +88,8 @@ class SkaarhojSmartSwitch
 	//extern const unsigned char _Font8x5[][6];
   public:
 	SkaarhojSmartSwitch();
-	void begin(int address, bool reverseButtons);
 	void begin(int address);
-	void usingB1alt();
+	void begin(int address, const uint8_t clockPin, const uint8_t dataPin);
 	void setColorBalance(int colorNumber, int redPart, int greenPart);
 	void setDefaultColor(uint8_t color);
 	void setButtonColorsToDefault();
@@ -104,7 +103,6 @@ class SkaarhojSmartSwitch
 	uint8_t buttonDownAll();
 	uint8_t buttonIsPressedAll();
 	bool isButtonIn(int buttonNumber, uint8_t allButtonsState);
-	void _writeEnableButtons(uint8_t buttons);
 
 	uint8_t getButtonModes();
 	void setButtonModes(uint8_t modes);
@@ -120,11 +118,11 @@ class SkaarhojSmartSwitch
 	void writeText(uint8_t buttons, char* textString, uint8_t lineNumber, int options);
 	void writeTextXY(uint8_t buttons, char* textString, int x, int y, int options);
 	inline void drawPixel(int x, int y, int val, int buttons);
+	void drawImage(uint8_t buttons, int x, int y, int options, uint8_t* image);
 	void drawChar(int x, int y, char c, int buttons, uint8_t* font, uint8_t reverse);
 	void drawHorisontalLine(int y, int buttons);
 	void drawVerticalLine(int x, int buttons);
 
-	void drawImage(uint8_t buttons, int x, int y, int options, uint8_t* image);
 	
   private:
 	void _readButtonStatus();
@@ -132,5 +130,6 @@ class SkaarhojSmartSwitch
 	bool _validColorNumber(int colorNumber);
 	bool _validPercentage(int percentage);
 	int _writeCommand(int address, int value, uint8_t buttons);
+	void _writeEnableButtons(uint8_t buttons);
 };
 #endif 

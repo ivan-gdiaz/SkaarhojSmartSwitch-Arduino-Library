@@ -1273,6 +1273,9 @@ static uint8_t _Font8x5[] PROGMEM = {
 SkaarhojSmartSwitch::SkaarhojSmartSwitch(){}	// Empty constructor.
 
 void SkaarhojSmartSwitch::begin(int address) {
+	begin(address, 5, 6);	// Default pins on Arduino non-Mega. On Mega we normally use 48 & 49 (Clock and Data)
+}
+void SkaarhojSmartSwitch::begin(int address, const uint8_t clockPin, const uint8_t dataPin) {
 	// NOTE: Wire.h should definitely be initialized at this point! (Wire.begin())
 	
 	_boardAddress = (address & B111);	// 0-3
@@ -1284,8 +1287,8 @@ void SkaarhojSmartSwitch::begin(int address) {
 
 	_buttonMode = 0;
 
-	_clockPin = 5;
-	_dataPin = 6;
+	_clockPin = clockPin;
+	_dataPin = dataPin;
 
 	pinMode(_clockPin, OUTPUT);
   	pinMode(_dataPin, OUTPUT);
@@ -1307,7 +1310,7 @@ void SkaarhojSmartSwitch::begin(int address) {
 }
 
 void SkaarhojSmartSwitch::setDefaultColor(uint8_t color) {
-	_defaultColor = color;
+//	_defaultColor = color;
 }
 
 void SkaarhojSmartSwitch::setButtonColorsToDefault() {
@@ -1412,6 +1415,12 @@ bool SkaarhojSmartSwitch::isButtonIn(int buttonNumber, uint8_t allButtonsState)	
 }
 
 
+uint8_t SkaarhojSmartSwitch::getButtonModes() {
+	return _buttonMode;
+}
+void SkaarhojSmartSwitch::setButtonModes(uint8_t buttonMode) {
+	_buttonMode = buttonMode;
+}
 
 
 
@@ -1578,6 +1587,7 @@ inline void SkaarhojSmartSwitch::drawPixel(int x, int y, int val, int buttons) {
 /**
  * Drawing image
  * X-Y has origin in upper left corner and positive axes towards right/down
+ * BUG: SmartSwitch.drawImage(BUTTON1, 0, -2, IMAGE_CENTER, movielogo);  // This line crashes the Arduino because of "-2". If "0" in the Y-coordinate, it doesn't. Probably there is a memory problem here!
  */
 void SkaarhojSmartSwitch::drawImage(uint8_t buttons, int x, int y, int options, uint8_t* image) {
 	uint8_t width = pgm_read_byte(image);
@@ -1636,12 +1646,6 @@ void SkaarhojSmartSwitch::drawVerticalLine(int x, int buttons) {
   drawLine(x,0,x,31, buttons);
 }
 
-uint8_t SkaarhojSmartSwitch::getButtonModes() {
-	return _buttonMode;
-}
-void SkaarhojSmartSwitch::setButtonModes(uint8_t buttonMode) {
-	_buttonMode = buttonMode;
-}
 
 
 

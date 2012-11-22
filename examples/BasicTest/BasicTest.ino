@@ -47,7 +47,8 @@ void setup() {
   Wire.begin(); 
 
   // Switches on address 0:  
-  SmartSwitch.begin(0);
+  //SmartSwitch.begin(0);	// Address 0, pins 5+6 default
+  SmartSwitch.begin(4,48,49);	// Address 4, pins 48+49
 
   // Setting full brightness (range 0-7) of all buttons:
   SmartSwitch.setButtonBrightness(7, BUTTON_ALL);
