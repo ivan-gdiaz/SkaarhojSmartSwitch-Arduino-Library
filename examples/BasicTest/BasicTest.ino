@@ -15,6 +15,18 @@
 SkaarhojSmartSwitch SmartSwitch;
 
 
+
+// no-cost stream operator as described at 
+// http://arduiniana.org/libraries/streaming/
+template<class T>
+inline Print &operator <<(Print &obj, T arg)
+{  
+  obj.print(arg); 
+  return obj; 
+}
+
+
+
 // Animated logo
 static uint8_t movielogo[] PROGMEM = {
   32, // width
@@ -41,7 +53,7 @@ void setup() {
 
   // Start the Serial (debugging) and UDP:
   Serial.begin(9600);  
- // Serial << F("\n- - - - - - - -\nSerial Started\n");
+  Serial << F("\n- - - - - - - -\nSerial Started\n");
 
   // Always initialize Wire before starting the SmartSwitch library
   Wire.begin(); 
@@ -51,6 +63,7 @@ void setup() {
   SmartSwitch.begin(4,48,49);	// Address 4, pins 48+49
 
   // Setting full brightness (range 0-7) of all buttons:
+  SmartSwitch.setButtonBrightness(7, BUTTON_ALL);
   SmartSwitch.setButtonBrightness(7, BUTTON_ALL);
 
   // Setting white color for all buttons:
